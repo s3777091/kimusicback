@@ -19,7 +19,7 @@ spring:
   session:
     store-type: none
 server:
-  port: ${PORT:4040}
+  port: ${PORT:1212}
 zing:
   apikey: 88265e23d4284f25963e6eedac8fbfa3
   version: 1.6.32
