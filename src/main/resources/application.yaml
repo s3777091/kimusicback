@@ -1,0 +1,22 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: 'true'
+  main:
+    allow-bean-definition-overriding: 'true'
+    banner-mode: 'off'
+  jackson:
+    serialization:
+      write-dates-as-timestamps: 'false'
+  session:
+    store-type: none
+server:
+  port: ${PORT:4040}
+zing:
+  apikey: 88265e23d4284f25963e6eedac8fbfa3
+  version: 1.6.32
+  serectkey: 2aa2d1c561e809b267f3638c4a307aab

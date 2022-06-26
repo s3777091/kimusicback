@@ -127,17 +127,17 @@ public class ZingServiceImpl implements ZingService {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             long time = timestamp.getTime() / 1000;
             String hash = "ctime=".concat(String.valueOf(time)).concat("page=").concat(page).concat("version=").concat(zing_version);
-            String signa = signature.sig(time, hash, HOME);
+            String signaTab = signature.sig(time, hash, HOME);
             return MP3LINK
                     .concat(HOME)
-                    .concat("?page=").concat(page)
-                    .concat("&segmentId=-1")
+                    .concat("?page=")
+                    .concat(page)
                     .concat("&ctime=")
                     .concat(String.valueOf(time))
                     .concat("&version=")
                     .concat(zing_version)
                     .concat("&sig=")
-                    .concat(signa)
+                    .concat(signaTab)
                     .concat("&apiKey=")
                     .concat(apikey);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {

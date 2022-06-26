@@ -1,23 +1,23 @@
 package GetApi.dathuynh.Controller;
 
+import GetApi.dathuynh.Entity.ZingEntity;
+import GetApi.dathuynh.Repository.ZingRepository;
 import GetApi.dathuynh.Service.ZingService;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.util.List;
+
 
 import static GetApi.dathuynh.Config.Constant.*;
 
@@ -28,6 +28,10 @@ public class ZingController {
     @Autowired
     ZingService zingService;
 
+    @Autowired
+    ZingRepository zingRepository;
+
+
     @GetMapping("/api/v2/get_play_list")
     public ResponseEntity<Object> getPlayList(@Param("code") String code) throws NoSuchAlgorithmException, InvalidKeyException {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -37,24 +41,48 @@ public class ZingController {
     }
 
 
+    //Get better music
     @GetMapping("/api/v2/get_listen")
-    public ResponseEntity<Object> getListenMp3(@Param("code") String code, HttpServletResponse response) {
+    public ResponseEntity<Object> getListenMp3(@Param("code") String code) {
+        try {
+            ZingEntity zing = zingRepository.findByPass(142632);
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            JSONObject detail = new JSONObject();
+            String link = Jsoup.connect(zingService.Get_MP3(timestamp.getTime() / 1000, code))
+                    .cookie("zmp3_rqid", zing.getZmp3_rqid())
+                    .cookie("zmp3_sid", zing.getZmp3_sid())
+                    .cookie("zpsid", zing.getZpsid())
+                    .ignoreContentType(true).get().text();
+            String tasLink = link.substring(link.indexOf("\"320\":\""), link.indexOf("\"},\"")).replace("\"320\":\"", "");
+            detail.put("music", tasLink);
+            return new ResponseEntity<>(detail.toMap(), HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(e, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
+    //Get PodCast
+    @GetMapping("/api/v2/get_podcast")
+    public ResponseEntity<Object> getPostCast(@Param("code") String code) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         JSONObject detail = new JSONObject();
-
-        String token = "MHwxLjU0LjM2LjYxfG51WeBGx8MTY1NTgxMzQ1NjA2NQ";
-        Cookie cookie = new Cookie("zmp3_rqid", token);
-        cookie.setDomain("zingmp3.vn");
-        cookie.setPath("/");
-
-        Cookie cookie1 = new Cookie("zmp3_rqid_lagecy", token);
-        cookie.setDomain("zingmp3.vn");
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        response.addCookie(cookie1);
-
         detail.put("music", zingService.Get_MP3(timestamp.getTime() / 1000, code));
         return new ResponseEntity<>(detail.toMap(), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/v2/post_cookies")
+    public ResponseEntity<Object> postCookies(@RequestBody ResCookies resCookies) {
+        zingRepository.deleteAll();
+        //Delete old one
+        //Add new one
+        ZingEntity zing = new ZingEntity();
+        zing.setZmp3_rqid(resCookies.getZmp3_rqid());
+        zing.setZmp3_sid(resCookies.getZmp3_sid());
+        zing.setZpsid(resCookies.getZpsid());
+        zing.setPass(142632);
+        zingRepository.save(zing);
+        return new ResponseEntity<>("Success post news Cookies", HttpStatus.OK);
     }
 
     @GetMapping("/api/v2/get_search")
@@ -73,10 +101,16 @@ public class ZingController {
     }
 
     @GetMapping("/api/v2/get_home")
-    public ResponseEntity<Object> getHome(@Param("page") String page) {
-        JSONObject detail = new JSONObject();
-        detail.put("HomeData", zingService.Get_Home(page));
-        return new ResponseEntity<>(detail.toMap(), HttpStatus.OK);
+    public ResponseEntity<Object> getHome() {
+        JSONArray tas = new JSONArray();
+        JSONObject finalObject = new JSONObject();
+        for (int i = 1; i <= 5; i++) {
+            JSONObject detail = new JSONObject();
+            detail.put("HomeData_".concat(String.valueOf(i)), zingService.Get_Home(String.valueOf(i)));
+            tas.put(detail);
+        }
+        finalObject.put("HomeData", tas);
+        return new ResponseEntity<>(finalObject.toMap(), HttpStatus.OK);
     }
 
     @GetMapping("/api/v2/get_radio")
