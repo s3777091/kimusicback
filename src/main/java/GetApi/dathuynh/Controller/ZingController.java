@@ -39,7 +39,7 @@ public class ZingController {
         detail.put("play_list", zingService.Get_playList(PLAYLIST, timestamp.getTime() / 1000, code));
         return new ResponseEntity<>(detail.toMap(), HttpStatus.OK);
     }
-    
+
     @GetMapping("/api/v2/get_listen")
     public ResponseEntity<Object> getListenMp3(@Param("code") String code) {
         try {
