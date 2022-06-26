@@ -24,9 +24,6 @@ public class ZingServiceImpl implements ZingService {
     @Value("${zing.version}")
     public String zing_version;
 
-
-
-
     @Override
     public String Get_Search(String keySearch, long time) {
         try {
