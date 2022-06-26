@@ -59,7 +59,6 @@ public class ZingController {
         }
     }
 
-
     //Get PodCast
     @GetMapping("/api/v2/get_podcast")
     public ResponseEntity<Object> getPostCast(@Param("code") String code) {
