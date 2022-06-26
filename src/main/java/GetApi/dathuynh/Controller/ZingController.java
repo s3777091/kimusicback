@@ -50,8 +50,8 @@ public class ZingController {
                     .cookie("zmp3_sid", "iuApQDuxJ5IjXxHftJfLNQYV_ckFN4iWeh2yRD5MCLp1jArlvsTQMiMytZ6_T5fQoB7SBRDp9ao2gzW1jNSWSPApkI7fKHKLtBtYMQyLLp6ShST7QMG")
                     .cookie("zpsid", "eMqpTcwdFagwSovZKu9eBiC8RtrMXMajmX5cU4xFQt-a3njoOOri8QvrPn5bd6yNdnvX5MtlCK-C7c4OOEqjGujYTr9wwG55ZsHAGcA88HcfKIuCRDDPNm")
                     .ignoreContentType(true).get().text();
-            String tasLink = link.substring(link.indexOf("\"320\":\""), link.indexOf("\"},\"")).replace("\"320\":\"", "");
-            detail.put("music", tasLink);
+/*            String tasLink = link.substring(link.indexOf("\"320\":\""), link.indexOf("\"},\"")).replace("\"320\":\"", "");*/
+            detail.put("music", link);
             return new ResponseEntity<>(detail.toMap(), HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(e, HttpStatus.UNAUTHORIZED);
