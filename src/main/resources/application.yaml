@@ -10,9 +10,9 @@ spring:
     allow-bean-definition-overriding: 'true'
     banner-mode: 'off'
   datasource:
-    password: 580cd816b40130d3fac9ad9dae9872f97b64a0efade6cbd9b6241be8973d11bd
-    username: bohbbztjjpexrq
-    url: jdbc:postgresql://ec2-3-228-235-79.compute-1.amazonaws.com:5432/ddcg4vlcnie9f1
+    password: 0905479841
+    username: dathuynh
+    url: jdbc:postgresql://103.82.20.244:5432/kimusicDatabase
   jackson:
     serialization:
       write-dates-as-timestamps: 'false'

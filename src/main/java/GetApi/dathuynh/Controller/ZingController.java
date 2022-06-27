@@ -43,12 +43,13 @@ public class ZingController {
     @GetMapping("/api/v2/get_listen")
     public ResponseEntity<Object> getListenMp3(@Param("code") String code) {
         try {
+            ZingEntity zing = new ZingEntity();
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             JSONObject detail = new JSONObject();
             String link = Jsoup.connect(zingService.Get_MP3(timestamp.getTime() / 1000, code))
-                    .cookie("zmp3_rqid", "MHwxLjU0LjM2LjYxfG51WeBGx8MTY1NjIyOTM5OTmUsIC4Mg")
-                    .cookie("zmp3_sid", "iuApQDuxJ5IjXxHftJfLNQYV_ckFN4iWeh2yRD5MCLp1jArlvsTQMiMytZ6_T5fQoB7SBRDp9ao2gzW1jNSWSPApkI7fKHKLtBtYMQyLLp6ShST7QMG")
-                    .cookie("zpsid", "eMqpTcwdFagwSovZKu9eBiC8RtrMXMajmX5cU4xFQt-a3njoOOri8QvrPn5bd6yNdnvX5MtlCK-C7c4OOEqjGujYTr9wwG55ZsHAGcA88HcfKIuCRDDPNm")
+                    .cookie("zmp3_rqid", zing.getZmp3_rqid())
+                    .cookie("zmp3_sid", zing.getZmp3_sid())
+                    .cookie("zpsid", zing.getZpsid())
                     .ignoreContentType(true).get().text();
             String tasLink = link.substring(link.indexOf("\"320\":\""), link.indexOf("\"},\"")).replace("\"320\":\"", "");
             detail.put("music", link);
