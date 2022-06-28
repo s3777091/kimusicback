@@ -52,7 +52,7 @@ public class ZingController {
                     .cookie("zpsid", zing.getZpsid())
                     .ignoreContentType(true).get().text();
             String tasLink = link.substring(link.indexOf("\"320\":\""), link.indexOf("\"},\"")).replace("\"320\":\"", "");
-            detail.put("music", link);
+            detail.put("music", tasLink);
             return new ResponseEntity<>(detail.toMap(), HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(e, HttpStatus.UNAUTHORIZED);

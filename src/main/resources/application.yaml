@@ -12,7 +12,7 @@ spring:
   datasource:
     password: 0905479841
     username: dathuynh
-    url: jdbc:postgresql://103.82.20.244:5432/kimusicDatabase
+    url: jdbc:postgresql://kimusic.live:5432/kimusicDatabase
   jackson:
     serialization:
       write-dates-as-timestamps: 'false'
